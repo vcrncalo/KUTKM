@@ -19,7 +19,7 @@ sed -i 's/python3/python2/g' waf;
 ./waf configure --enable-tests --enable-examples --disable-python && ./waf build;
 ```
 
-*Kod se može pokrenuti putem*
+*Kod se može pokrenuti na sljedeći način:*
 
 ```bash
 ./waf --run=TSN
