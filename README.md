@@ -18,3 +18,9 @@ sudo apt install python2 -y;
 sed -i 's/python3/python2/g' waf;
 ./waf configure --enable-tests --enable-examples --disable-python && ./waf build;
 ```
+
+*Kod se može pokrenuti putem*
+
+```bash
+./waf --run=TSN
+```
