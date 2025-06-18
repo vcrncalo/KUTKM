@@ -16,5 +16,5 @@ git clone https://github.com/DenKrysos/Time-Aware-Shaper-TAS-in-ns-3.git;
 cd ns-allinone-3.31/ns-3.31/;
 sudo apt install python2 -y;
 sed -i 's/python3/python2/g' waf;
-./waf configure --enable-tests --enable-examples --disable-python && ./waf build
+./waf configure --enable-tests --enable-examples --disable-python && ./waf build;
 ```
