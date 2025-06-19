@@ -24,7 +24,7 @@ sed -i 's/python3/python2/g' waf;
 ```bash
 ./waf --run=TSN
 ```
-*ili ako je već instaliran ns3, kopirati TSN.cc u "scratch" folder i pokrenuti iz direktorija /ns-allinone-3.42/ns-3.42$:*
+*ili ako je već instaliran ns3 koji koristi verziju 3.42, kopirati TSN.cc u "scratch" folder i pokrenuti iz direktorija /ns-allinone-3.42/ns-3.42$:*
 ```bash
 ./ns3 run scratch/TSN.cc 
 ```
