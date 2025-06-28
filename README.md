@@ -70,13 +70,13 @@ Ispis nakon pokretanja date skripte nakon završetka iste prikazuje gdje se nala
 
 ### GnuPlot dijagrami
 
-![TSN2\_output.png](Time-Sensitive-Networking/images_dir/TSN2_output.png)
+![TSN2\_output.png](time-sensitive-networking/images_dir/TSN2_output.png)
 *GnuPlot rezultati TSN2 skripte*
 
-![TSN3\_output.png](Time-Sensitive-Networking/images_dir/TSN3_output.png)
+![TSN3\_output.png](time-sensitive-networking/images_dir/TSN3_output.png)
 *GnuPlot rezultati TSN3 skripte*
 
-![TSN4\_output.png](Time-Sensitive-Networking/images_dir/TSN4_output.png)
+![TSN4\_output.png](time-sensitive-networking/images_dir/TSN4_output.png)
 *GnuPlot rezultati TSN4 skripte*
 
 
