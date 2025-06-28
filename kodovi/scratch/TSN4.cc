@@ -6,9 +6,13 @@
 #include "ns3/ipv4-global-routing-helper.h"
 #include "ns3/netanim-module.h"
 #include "ns3/mobility-module.h"
+#include "ns3/seq-ts-header.h"
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include "ns3/tsn-module.h"
+#include "ns3/traffic-control-module.h"
 
 using namespace ns3;
 
@@ -21,6 +25,10 @@ struct PacketTrace {
 
 std::map<uint32_t, PacketTrace> packetTracker;
 std::vector<std::string> nodeNames = {"TSN Client", "Relay1", "BestEffor Node", "Relay2", "Destination"};
+
+static uint32_t g_sequenceNumber = 0;
+static std::map<uint32_t, uint32_t> uidToSeqMap;
+static std::map<uint32_t, std::string> uidToTrafficType;
 
 static Time g_firstPacketTime = Seconds(0.0);
 static Time g_lastPacketTime = Seconds(0.0);
@@ -42,6 +50,12 @@ double m_time = 0;
 double lastDelay = 0.0;
 double jitter = 0.0;
 
+//TSN stats
+double tsnDelay = 0.0;
+int tsnCount = 0;
+double beDelay = 0.0;
+int beCount = 0;
+
 //Create c++ map for measuring delay time
 std::map<uint32_t, double> m_delayTable;
 
@@ -52,17 +66,23 @@ SentPacket(Ptr<const Packet> p) {
     m_packets_sent++;
     
     
-    
     if (g_firstPacket) {
     	g_firstPacketTime = Simulator::Now();
     	g_firstPacket = false;
     }
     
     g_lastPacketTime = Simulator::Now();
-    
     PacketStartTimes[p->GetUid()] = Simulator::Now().GetSeconds();
-    
-    std::cout << "\nPacket " << p->GetUid() << " sent at time " <<    Simulator::Now().GetSeconds() << "s" << std::endl;
+    uidToSeqMap[p->GetUid()] = g_sequenceNumber++;
+    //TSN uslov
+    	if (Simulator::GetContext() == 0) {
+        uidToTrafficType[p->GetUid()] = "TSN";
+    }   
+    	else if (Simulator::GetContext() == 2) {
+        uidToTrafficType[p->GetUid()] = "BE";
+    }
+
+    std::cout << "\nPacket " << uidToSeqMap[p->GetUid()] << " sent at time " << Simulator::Now().GetSeconds() << "s" << std::endl;
     
 }
 
@@ -72,16 +92,13 @@ ReceivedPacket(Ptr<const Packet> p) {
     m_bytes_received += p->GetSize();
     m_packets_received++;
     
-    
-
-
     /*
     //HELP LINES USED FOR TESTING
     std::cout << "\n ..................ReceivedPacket....." << p->GetUid() << "..." <<  p->GetSize() << ".......  \n";
     p->Print(std::cout);
     std::cout << "\n ............................................  \n";
     */
-
+	
         double endTime = Simulator::Now().GetSeconds();
         double startTime = PacketStartTimes[p->GetUid()];
         double packetDelay = endTime - startTime;
@@ -94,7 +111,21 @@ ReceivedPacket(Ptr<const Packet> p) {
         totalDelay += packetDelay;
         packetCount++;
         
-        std::cout << "\nPacket " << p->GetUid() << " received at time " << endTime << "s with Delay of :"<< packetDelay << " s " << " | Jitter: " << jitter << " s" << std::endl;
+        uint32_t seqNum = uidToSeqMap[p->GetUid()];
+        std::string trafficType = uidToTrafficType[p->GetUid()];
+	//TSN uslov
+	if (trafficType == "TSN") {
+    	 tsnDelay += packetDelay;
+   	 tsnCount++;
+	} 
+	else if (trafficType == "BE") {
+    	 beDelay += packetDelay;
+    	 beCount++;
+}
+
+
+
+    std::cout << "\nPacket " << seqNum << " received at time " << endTime << "s with Delay of :" << packetDelay << " s  | Jitter: " << jitter << " s" << std::endl;
   }
         
 void
@@ -124,11 +155,34 @@ Ratio() {
     if (packetCount > 0) {
        
        std::cout << "Average End - to - End Delay :\t" << totalDelay/packetCount << "s" << std::endl; 
-    
-    }          
+     }
+     //TSN ispis
+     if (tsnCount > 0)
+      std::cout << "Avg TSN Delay:\t" << tsnDelay / tsnCount << " s" << std::endl;
+     if (beCount > 0)
+      std::cout << "Avg BE Delay:\t" << beDelay / beCount << " s" << std::endl;
+          
 }
 
 
+Time callbackfunc() {
+    return Simulator::Now(); // Used by the TAS scheduler
+}
+
+//TSN paketi 
+int32_t ipv4PacketFilter(Ptr<QueueDiscItem> item) {
+    Ipv4Header ipHeader;
+    item->GetPacket()->PeekHeader(ipHeader);
+
+    Ipv4Address srcAddr = ipHeader.GetSource();
+
+    if (srcAddr == "10.1.1.1") { // TSN Client 
+        return 4; // Viši prioritet
+    } else if (srcAddr == "10.1.2.1") { // BestEffort 
+        return 1; // Niži prioritet
+    }
+    return 0;
+}
 
 
 int main(int argc, char *argv[]) {
@@ -136,7 +190,7 @@ int main(int argc, char *argv[]) {
     Config::SetDefault ("ns3::Ipv4GlobalRouting::RespondToInterfaceEvents",BooleanValue(true));
 
     double simulationTime = 300;  
-    double maxPackets = 10;
+    double maxPackets = 30;
     double packetSize = 128;
  
     Packet::EnablePrinting();
@@ -154,8 +208,8 @@ int main(int argc, char *argv[]) {
     LogComponentEnable ("SimpleTSN", LOG_LEVEL_ALL);
 
     PointToPointHelper pointToPoint;
-    pointToPoint.SetDeviceAttribute("DataRate", StringValue("5Mbps"));
-    pointToPoint.SetChannelAttribute("Delay", StringValue("25ms"));
+    pointToPoint.SetDeviceAttribute("DataRate", StringValue("128kbps"));
+    pointToPoint.SetChannelAttribute("Delay", StringValue("20ms"));
 
     NodeContainer nodes;
     nodes.Create(5); 
@@ -186,6 +240,36 @@ int main(int argc, char *argv[]) {
     // Enable global routing
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
+    //TAS Scheduling
+	TsnHelper tsnHelperClient, tsnHelperServer;
+	NetDeviceListConfig schedulePlanClient, schedulePlanServer;
+
+	Time scheduleDuration = Seconds(1);
+
+	// ON/OFF pattern
+	for (int i = 0; i < 5; i++) {
+    	  schedulePlanClient.Add(scheduleDuration,{0,0,0,0,0,0,0,0});
+  	  schedulePlanClient.Add(scheduleDuration,{1,1,1,1,1,1,1,1});
+  	  
+    	  schedulePlanServer.Add(scheduleDuration,{1,1,1,1,1,1,1,1});
+  	  schedulePlanServer.Add(scheduleDuration,{1,1,1,1,1,1,1,1});
+  	  
+	}
+
+	// Link: Node 0 (TSN client) Node 1 (Relay1)
+	tsnHelperClient.SetRootQueueDisc("ns3::TasQueueDisc",
+    	"NetDeviceListConfig", NetDeviceListConfigValue(schedulePlanClient),
+    	"TimeSource", CallbackValue(MakeCallback(&callbackfunc)),
+    	"DataRate", StringValue("5Mbps"));
+
+	tsnHelperClient.AddPacketFilter(0, "ns3::TsnIpv4PacketFilter", "Classify",
+    	CallbackValue(MakeCallback(&ipv4PacketFilter)));
+
+	tsnHelperServer.SetRootQueueDisc("ns3::TasQueueDisc",
+	"NetDeviceListConfig", NetDeviceListConfigValue(schedulePlanServer),
+	"TimeSource", CallbackValue(MakeCallback(&callbackfunc)),
+    	"DataRate", StringValue("5Mbps"));
+
     // UdpEchoServer on Destination (Node 4)
     uint16_t echoPort = 9;
     UdpEchoServerHelper echoServer(echoPort);
@@ -196,23 +280,23 @@ int main(int argc, char *argv[]) {
 
     // TSN Client 
     UdpEchoClientHelper tsnClient(interface34.GetAddress(1), echoPort);
-    tsnClient.SetAttribute("MaxPackets", UintegerValue(5));
+    tsnClient.SetAttribute("MaxPackets", UintegerValue(maxPackets));
     tsnClient.SetAttribute("Interval", TimeValue(Seconds(1.0))); 
     tsnClient.SetAttribute("PacketSize", UintegerValue(64));
 
     ApplicationContainer tsnApp = tsnClient.Install(nodes.Get(0));
-    tsnApp.Start(Seconds(2.0));
-    tsnApp.Stop(Seconds(20.0));
+    tsnApp.Start(Seconds(1.0));
+    tsnApp.Stop(Seconds(30.0));
 
     // Best-Effort Client 
     UdpEchoClientHelper beClient(interface34.GetAddress(1), echoPort);
-    beClient.SetAttribute("MaxPackets", UintegerValue(5));
-    beClient.SetAttribute("Interval", TimeValue(Seconds(1.5))); 
-    beClient.SetAttribute("PacketSize", UintegerValue(64));
+    beClient.SetAttribute("MaxPackets", UintegerValue(maxPackets));
+    beClient.SetAttribute("Interval", TimeValue(Seconds(100))); 
+    beClient.SetAttribute("PacketSize", UintegerValue(1024));
 
     ApplicationContainer beApp = beClient.Install(nodes.Get(2));
-    beApp.Start(Seconds(2.0));
-    beApp.Stop(Seconds(20.0));
+    beApp.Start(Seconds(1.0));
+    beApp.Stop(Seconds(30.0));
 
    
     Config::ConnectWithoutContext("/NodeList/0/ApplicationList/*/$ns3::UdpEchoClient/Tx", MakeCallback(&SentPacket));
@@ -250,7 +334,7 @@ int main(int argc, char *argv[]) {
     mob4->SetPosition(Vector(300.0, 50.0, 0.0)); 
 
     // NetAnim
-    AnimationInterface anim("TSN.xml");
+    AnimationInterface anim("TSN4.xml");
     anim.SetMaxPktsPerTraceFile(5000);
     
     anim.UpdateNodeDescription(0, "TSN Client"); 
@@ -274,7 +358,7 @@ int main(int argc, char *argv[]) {
     //;
 
     
-    pointToPoint.EnablePcapAll("TSN_packet_trace");
+    pointToPoint.EnablePcapAll("TSN4_packet_trace");
     
     Simulator::Schedule(Seconds(simulationTime), &Ratio);
 

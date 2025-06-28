@@ -1,0 +1,120 @@
+Waf: Entering directory `/home/etftk/ns-allinone-3.31/ns-3.31/build'
+Waf: Leaving directory `/home/etftk/ns-allinone-3.31/ns-3.31/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (1.475s)
+
+Packet 0 sent at time 1s
+
+Packet 1 sent at time 1s
+
+Packet 0 received at time 1.06881s with Delay of :0.0688125 s  | Jitter: 0.00430078 s
+
+Packet 1 received at time 1.11081s with Delay of :0.110812 s  | Jitter: 0.00665698 s
+
+Packet 2 sent at time 2s
+
+Packet 2 received at time 2.06881s with Delay of :0.0688125 s  | Jitter: 0.00886592 s
+
+Packet 3 sent at time 3s
+
+Packet 3 received at time 3.06881s with Delay of :0.0688125 s  | Jitter: 0.0083118 s
+
+Packet 4 sent at time 4s
+
+Packet 4 received at time 4.06881s with Delay of :0.0688125 s  | Jitter: 0.00779231 s
+
+Packet 5 sent at time 5s
+
+Packet 5 received at time 5.06881s with Delay of :0.0688125 s  | Jitter: 0.00730529 s
+
+Packet 6 sent at time 6s
+
+Packet 6 received at time 6.06881s with Delay of :0.0688125 s  | Jitter: 0.00684871 s
+
+Packet 7 sent at time 7s
+
+Packet 7 received at time 7.06881s with Delay of :0.0688125 s  | Jitter: 0.00642067 s
+
+Packet 8 sent at time 8s
+
+Packet 8 received at time 8.06881s with Delay of :0.0688125 s  | Jitter: 0.00601938 s
+
+Packet 9 sent at time 9s
+
+Packet 9 received at time 9.06881s with Delay of :0.0688125 s  | Jitter: 0.00564317 s
+
+Packet 10 sent at time 10s
+
+Packet 10 received at time 10.0688s with Delay of :0.0688125 s  | Jitter: 0.00529047 s
+
+Packet 11 sent at time 11s
+
+Packet 11 received at time 11.0688s with Delay of :0.0688125 s  | Jitter: 0.00495981 s
+
+Packet 12 sent at time 12s
+
+Packet 12 received at time 12.0688s with Delay of :0.0688125 s  | Jitter: 0.00464983 s
+
+Packet 13 sent at time 13s
+
+Packet 13 received at time 13.0688s with Delay of :0.0688125 s  | Jitter: 0.00435921 s
+
+Packet 14 sent at time 14s
+
+Packet 14 received at time 14.0688s with Delay of :0.0688125 s  | Jitter: 0.00408676 s
+
+Packet 15 sent at time 15s
+
+Packet 15 received at time 15.0688s with Delay of :0.0688125 s  | Jitter: 0.00383134 s
+
+Packet 16 sent at time 16s
+
+Packet 16 received at time 16.0688s with Delay of :0.0688125 s  | Jitter: 0.00359188 s
+
+Packet 17 sent at time 17s
+
+Packet 17 received at time 17.0688s with Delay of :0.0688125 s  | Jitter: 0.00336739 s
+
+Packet 18 sent at time 18s
+
+Packet 18 received at time 18.0688s with Delay of :0.0688125 s  | Jitter: 0.00315693 s
+
+Packet 19 sent at time 19s
+
+Packet 19 received at time 19.0688s with Delay of :0.0688125 s  | Jitter: 0.00295962 s
+
+Packet 20 sent at time 20s
+
+Packet 21 sent at time 21s
+
+Packet 22 sent at time 22s
+
+Packet 23 sent at time 23s
+
+Packet 24 sent at time 24s
+
+Packet 25 sent at time 25s
+
+Packet 26 sent at time 26s
+
+Packet 27 sent at time 27s
+
+Packet 28 sent at time 28s
+
+Packet 29 sent at time 29s
+
+=== TSN Statistics ===
+
+Transmission Summary : 
+---------------------------
+Total Bytes Sent:	2368
+Total Bytes Received:	1728
+Total Packets Sent:	30
+Total Packets Received:	20
+Delivery Ratio (bytes):	72.973%
+Delivery Ratio (packets):	66.6667%
+Troughput (bps) :	 46.08 bps 
+Troughput (kbps) :	 0.04608 kbps 
+Average End - to - End Delay :	0.0709125s
+Avg TSN Delay:	0.0688125 s
+Avg BE Delay:	0.110812 s
