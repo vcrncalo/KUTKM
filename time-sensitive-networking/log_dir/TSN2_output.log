@@ -1,7 +1,7 @@
 Waf: Entering directory `/home/etftk/ns-allinone-3.31/ns-3.31/build'
 Waf: Leaving directory `/home/etftk/ns-allinone-3.31/ns-3.31/build'
 Build commands will be stored in build/compile_commands.json
-'build' finished successfully (1.475s)
+'build' finished successfully (1.546s)
 
 Packet 0 sent at time 1s
 

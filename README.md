@@ -79,4 +79,5 @@ Ispis nakon pokretanja date skripte nakon završetka iste prikazuje gdje se nala
 ![TSN4\_output.png](time-sensitive-networking/images_dir/TSN4_output.png)
 *GnuPlot rezultati TSN4 skripte*
 
-
+![TSN\_throughput\_summary.png](time-sensitive-networking/images_dir/TSN_throughput_summary.png)
+*GnuPlot rezultati - Prikaz propusnosti*

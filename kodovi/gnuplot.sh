@@ -79,5 +79,41 @@ EOF
     cd ..;
     ((counter++));
 done;
+echo "${green}Kreiranje zbirnog throughput grafikona...${white}"
+
+# Zbirni fajl sa throughput-ima svih TSN simulacija
+throughput_summary_file="TSN_throughput_summary.dat"
+
+echo "#TSN_Scenario Throughput_bps" > "$throughput_summary_file"
+
+for i in "${nums[@]}"; do
+    log_file="Time-Sensitive-Networking/log_dir/TSN${i}_output.log"
+    throughput=$(grep "Troughput (bps)" "$log_file" | awk -F':' '{print $2}' | awk '{print $1}')
+    echo "TSN${i} $throughput" >> "$throughput_summary_file"
+done
+
+# Gnuplot skripta za zbirni throughput graf
+cat <<EOF > TSN_throughput_summary.plt
+set terminal png size 800,600
+set output 'TSN_throughput_summary.png'
+
+set title "Throughput for all 3 TSN cases "
+set xlabel "TSN Scenario"
+set ylabel "Throughput (bps)"
+set style data histograms
+set style fill solid
+set boxwidth 0.5
+set grid
+
+plot '$throughput_summary_file' using 2:xtic(1) title 'Throughput'
+EOF
+
+gnuplot TSN_throughput_summary.plt
+
+# Premještanje u odgovarajuće direktorijume
+mv "$throughput_summary_file" Time-Sensitive-Networking/gnuplot_dir
+mv TSN_throughput_summary.plt Time-Sensitive-Networking/gnuplot_dir
+mv TSN_throughput_summary.png Time-Sensitive-Networking/images_dir
+
 echo "--------------------------------------------------------------------------";
 echo "Glavni direktorij se nalazi na sljedećoj lokaciji: ${green}$final_dir${white}";
