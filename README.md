@@ -81,3 +81,27 @@ Ispis nakon pokretanja date skripte nakon završetka iste prikazuje gdje se nala
 
 ![TSN\_throughput\_summary.png](time-sensitive-networking/images_dir/TSN_throughput_summary.png)
 *GnuPlot rezultati - Prikaz propusnosti*
+
+### Video snimci
+
+*Sljedeća tri video snimka prikazuju filtriranje mrežnog saobraćaja koji je zapisan i sačuvan u .pcap datoteke nakon pokretanja simulacije:*
+
+![tsn2-wireshark](videi/tsn2-wireshark.mp4)
+*Filtriranje .pcap datoteke prvog slučaja (TSN2.cc)*
+
+![tsn3-wireshark](videi/tsn3-wireshark.mp4)
+*Filtriranje .pcap datoteke prvog slučaja (TSN3.cc)*
+
+![tsn4-wireshark](videi/tsn4-wireshark.mp4)
+*Filtriranje .pcap datoteke prvog slučaja (TSN4.cc)*
+
+*Sljedeća tri video snimka prikazuju vizuelizaciju mrežne topologije u NetAnim-u:*
+
+![tsn2-netanim](videi/tsn2-netanim.mp4)
+*Filtriranje .pcap datoteke prvog slučaja (TSN2.cc)*
+
+![tsn3-netanim](videi/tsn3-netanim.mp4)
+*Filtriranje .pcap datoteke prvog slučaja (TSN3.cc)*
+
+![tsn4-netanim](videi/tsn4-netanim.mp4)
+*Filtriranje .pcap datoteke prvog slučaja (TSN4.cc)*
