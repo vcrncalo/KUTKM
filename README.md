@@ -84,6 +84,8 @@ Ispis nakon pokretanja date skripte nakon završetka iste prikazuje gdje se nala
 
 ### Video snimci
 *Video snimke je najbolje pokrenuti pomoću VLC-a*
+
+
 *Sljedeća tri video snimka prikazuju filtriranje mrežnog saobraćaja koji je zapisan i sačuvan u .pcap datoteke nakon pokretanja simulacije:*
 
 ![tsn2-wireshark](videi/tsn2-wireshark.mp4)
