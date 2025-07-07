@@ -25,6 +25,8 @@ function gnuplot_calc(){
 	local plt="$5";
 	local png="$6";
 	local gnuplot_dir="$7";
+	local be="$8";
+	local tsn="$9";
 	
 	echo -e "${magenta}$delay${white}";	
 	echo -e "${magenta}$jitter${white}";	
@@ -38,7 +40,8 @@ function gnuplot_calc(){
 	set xlabel "Packet Sequence Number"
 	set ylabel "Delay (seconds)"
 	set grid
-	plot "$output" using 1:3 with linespoints title "Delay"
+	plot "$be" using 1:3 with linespoints lt rgb "red" title "Best effort Delay", \
+	"$tsn" using 1:3 with linespoints lt rgb "blue" title "TSN Delay"
 	replot
 EOF
 	cat << EOF > "$jitter"
@@ -48,7 +51,8 @@ EOF
 	set xlabel "Packet Sequence Number"
 	set ylabel "Jitter (seconds)"
 	set grid
-	plot "$output" using 1:4 with linespoints lt rgb "red" title "Jitter"
+	plot "$be" using 1:4 with linespoints lt rgb "red" title "Best effort Jitter", \
+	"$tsn" using 1:4 with linespoints lt rgb "blue" title "TSN Jitter"
 	replot
 EOF
 	gnuplot "$delay" 
@@ -137,12 +141,17 @@ for ((i=0; i<=${#scratch[@]}-1; i++)); do
 	#sleep 1;
 	
 	current_file="$results_dir/${scratch[$i]%.cc}_ispis.txt";
+	current_file_be="$results_dir/${scratch[$i]%.cc}_ispis_be.txt";
+	current_file_tsn="$results_dir/${scratch[$i]%.cc}_ispis_tsn.txt";
+	
 	gnuplot_file_delay="$gnuplot_dir/${scratch[$i]%.cc}-delay.plt";
 	gnuplot_file_jitter="$gnuplot_dir/${scratch[$i]%.cc}-jitter.plt";
 
 	./waf --run "${scratch[$i]%.cc} --maxPackets=$packets --PacketSize=$size" > "$current_file";
 
-	tee "$current_file" <<< "$(grep '^Packet.*received' "$current_file" | awk 'NR == 1 {gsub(/^/, "#", $1); gsub(":", "", $13); printf "%s %s %s %s\n", tolower($1), tolower($5), tolower($8), tolower($13)}{gsub(/s$/, "", $6); gsub(/^:/, "", $10); printf "%s %s %s %s\n", $2, $6, $10, $14}')"  
+	tee "$current_file_be" <<< "$(grep '^\[BE\]' "$current_file" | awk 'NR == 1 {gsub(/^/, "#", $2); gsub(":", "", $14); printf "%s %s %s %s\n", tolower($2), tolower($6), tolower($9), tolower($14)}{gsub(/s$/, "", $7); gsub(/^:/, "", $11); printf "%s %s %s %s\n", $3, $7, $11, $15}')"  
+	
+	tee "$current_file_tsn" <<< "$(grep '^\[TSN\]' "$current_file" | awk 'NR == 1 {gsub(/^/, "#", $2); gsub(":", "", $14); printf "%s %s %s %s\n", tolower($2), tolower($6), tolower($9), tolower($14)}{gsub(/s$/, "", $7); gsub(/^:/, "", $11); printf "%s %s %s %s\n", $3, $7, $11, $15}')"  
 	echo "";
 
 	# Moving files
@@ -150,7 +159,7 @@ for ((i=0; i<=${#scratch[@]}-1; i++)); do
 	mv $(ls | grep TSN${counter}.xml) "$xml_dir";
 	((counter++));
 
-	gnuplot_calc "$gnuplot_file_delay" "$gnuplot_file_jitter" "$current_file" "$size" "$gnuplot_dir_plt" "$gnuplot_dir_png" "$gnuplot_dir";	
+	gnuplot_calc "$gnuplot_file_delay" "$gnuplot_file_jitter" "$current_file" "$size" "$gnuplot_dir_plt" "$gnuplot_dir_png" "$gnuplot_dir" "$current_file_be" "$current_file_tsn";	
 done;
 echo -e "\nKreiran je glavni TSN direktorij u kojem se nalaze sve relevantne datoteke za ovu simulaciju: ${magenta}$fin_dir${white}";
 echo "--------------------------------------------------";

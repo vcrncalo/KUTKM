@@ -136,7 +136,7 @@ ReceivedPacket(Ptr<const Packet> p)
         m_be_packets_received++;
     }
 
-    std::cout << "\nPacket " << seqNum << " received at time " << endTime << "s with Delay of :" << packetDelay << " s  | Jitter: " << jitter << " s" << std::endl;
+    std::cout << "\n" << "[" << trafficType << "]" << " " << "Packet " << seqNum << " received at time " << endTime << "s with Delay of :" << packetDelay << " s  | Jitter: " << jitter << " s" << std::endl;
 }
 
 void Ratio()
