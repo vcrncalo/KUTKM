@@ -40,15 +40,15 @@ Datoteke koje se nalaze u: `kodovi/scratch` folderu se trebaju premjestiti u scr
 *Kod se može pokrenuti na sljedeći način:*
 
 ```bash
-./waf --run=TSN2
+./waf --run=TSN1
 ```
 
-Pored `TSN2` koda, mogu se pokrenuti i `TSN3` i `TSN4` kodovi. Pokretanje svakog od ovih kodova će prikazati različite rezultate simulacije.
+Pored `TSN1` koda, mogu se pokrenuti i `TSN2` i `TSN4` kodovi. Pokretanje svakog od ovih kodova će prikazati različite rezultate simulacije.
 
-`gnuplot.sh` jer skripta koja se nalazi u: `kodovi` folderu. Može se preuzeti i sačuvati na bilo kojoj lokaciji, a pokreće se na sljedeći način (nakon što se promijeni aktivni direktorij u direktorij gdje se ova skripta nalazi):
+`tsn-gnuplot.sh` jer skripta koja se nalazi u: `kodovi` folderu. Može se preuzeti i sačuvati na bilo kojoj lokaciji, a pokreće se na sljedeći način (nakon što se promijeni aktivni direktorij u direktorij gdje se ova skripta nalazi):
 
 ```bash
-. gnuplot.sh
+. tsn-gnuplot.sh
 ```
 
 Ova skripta omogućava brojne funkcionalnosti, poput promjene aktivnog direktorija, generisanje gnuplot datoteka, filtriranje ispisa simulacije, a glavna svrha joj je kreiranje gnuplot dijagrama. Ovo na kraju kreira folder: "Time-Sensitive-Networking", u kojem se nalaze folderi za xml datoteke, gnuplot dijagrame, pcap datoteke i log datoteke. Potrebno je koristiti tačku prilikom poziva ove skripte zbog funkcija poput `cd` koje se koriste u istoj skripti.
@@ -59,22 +59,22 @@ Ispis nakon pokretanja date skripte nakon završetka iste prikazuje gdje se nala
 
 ### Ispis iz terminala 
 
+![TSN1.png](slike/TSN1.png)
+*Rezultati nakon pokretanja `TSN1` skripte*
+
 ![TSN2.png](slike/TSN2.png)
 *Rezultati nakon pokretanja `TSN2` skripte*
-
-![TSN3.png](slike/TSN3.png)
-*Rezultati nakon pokretanja `TSN3` skripte*
 
 ![TSN4.png](slike/TSN4.png)
 *Rezultati nakon pokretanja `TSN4` skripte*
 
 ### GnuPlot dijagrami
 
+![TSN1\_output.png](time-sensitive-networking/images_dir/TSN1_output.png)
+*GnuPlot rezultati TSN1 skripte*
+
 ![TSN2\_output.png](time-sensitive-networking/images_dir/TSN2_output.png)
 *GnuPlot rezultati TSN2 skripte*
-
-![TSN3\_output.png](time-sensitive-networking/images_dir/TSN3_output.png)
-*GnuPlot rezultati TSN3 skripte*
 
 ![TSN4\_output.png](time-sensitive-networking/images_dir/TSN4_output.png)
 *GnuPlot rezultati TSN4 skripte*
@@ -89,10 +89,10 @@ Ispis nakon pokretanja date skripte nakon završetka iste prikazuje gdje se nala
 *Sljedeća tri video snimka prikazuju filtriranje mrežnog saobraćaja koji je zapisan i sačuvan u .pcap datoteke nakon pokretanja simulacije:*
 
 ![tsn2-wireshark](videi/tsn2-wireshark.mp4)
-*Filtriranje .pcap datoteke prvog slučaja (TSN2.cc)*
+*Filtriranje .pcap datoteke prvog slučaja (TSN1.cc)*
 
 ![tsn3-wireshark](videi/tsn3-wireshark.mp4)
-*Filtriranje .pcap datoteke prvog slučaja (TSN3.cc)*
+*Filtriranje .pcap datoteke prvog slučaja (TSN2.cc)*
 
 ![tsn4-wireshark](videi/tsn4-wireshark.mp4)
 *Filtriranje .pcap datoteke prvog slučaja (TSN4.cc)*
@@ -100,10 +100,10 @@ Ispis nakon pokretanja date skripte nakon završetka iste prikazuje gdje se nala
 *Sljedeća tri video snimka prikazuju vizuelizaciju mrežne topologije u NetAnim-u:*
 
 ![tsn2-netanim](videi/tsn2-netanim.mp4)
-*Filtriranje .pcap datoteke prvog slučaja (TSN2.cc)*
+*Filtriranje .pcap datoteke prvog slučaja (TSN1.cc)*
 
 ![tsn3-netanim](videi/tsn3-netanim.mp4)
-*Filtriranje .pcap datoteke prvog slučaja (TSN3.cc)*
+*Filtriranje .pcap datoteke prvog slučaja (TSN2.cc)*
 
 ![tsn4-netanim](videi/tsn4-netanim.mp4)
 *Filtriranje .pcap datoteke prvog slučaja (TSN4.cc)*

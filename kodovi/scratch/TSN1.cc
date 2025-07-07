@@ -202,12 +202,12 @@ int32_t ipv4PacketFilter(Ptr<QueueDiscItem> item)
     Ipv4Address srcAddr = ipHeader.GetSource();
 
     if (srcAddr == "10.1.1.1")
-    {             // TSN Client
-        return 0; 
+    { // TSN Client
+        return 0;
     }
     else if (srcAddr == "10.1.2.1")
-    {             // BestEffort
-        return 7; 
+    { // BestEffort
+        return 7;
     }
     return 7;
 }
@@ -217,9 +217,9 @@ int main(int argc, char *argv[])
 
     Config::SetDefault("ns3::Ipv4GlobalRouting::RespondToInterfaceEvents", BooleanValue(true));
 
-    double simulationTime = 200;
-    double maxPackets = 50;
-    double packetSize = 64;
+    double simulationTime = 150;
+    double maxPackets = 30;
+    double packetSize = 128;
 
     Packet::EnablePrinting();
     PacketMetadata::Enable();
@@ -275,13 +275,13 @@ int main(int argc, char *argv[])
     Time scheduleDuration = Seconds(1);
 
     // ON/OFF pattern
-
     for (int i = 0; i < 5; i++)
     {
         schedulePlanClient.Add(scheduleDuration, {1, 1, 1, 1, 1, 1, 1, 1});
-        schedulePlanClient.Add(scheduleDuration, {1, 1, 1, 1, 1, 1, 1, 1});
+        schedulePlanServer.Add(scheduleDuration, {1, 0, 0, 0, 0, 0, 0, 0});
 
-        schedulePlanServer.Add(scheduleDuration, {0, 0, 0, 0, 0, 0, 0, 0});
+        // 1s BE (priority 7)
+        schedulePlanClient.Add(scheduleDuration, {0, 0, 0, 0, 0, 0, 0, 0});
         schedulePlanServer.Add(scheduleDuration, {0, 0, 0, 0, 0, 0, 0, 0});
     }
 
@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
     // TSN Client
     UdpEchoClientHelper tsnClient(interface34.GetAddress(1), echoPort);
     tsnClient.SetAttribute("MaxPackets", UintegerValue(maxPackets));
-    tsnClient.SetAttribute("Interval", TimeValue(Seconds(1.0)));
+    tsnClient.SetAttribute("Interval", TimeValue(Seconds(0.5)));
     tsnClient.SetAttribute("PacketSize", UintegerValue(packetSize));
 
     ApplicationContainer tsnApp = tsnClient.Install(nodes.Get(0));
@@ -325,7 +325,7 @@ int main(int argc, char *argv[])
     // Best-Effort Client
     UdpEchoClientHelper beClient(interface34.GetAddress(1), echoPort);
     beClient.SetAttribute("MaxPackets", UintegerValue(maxPackets));
-    beClient.SetAttribute("Interval", TimeValue(Seconds(1.0)));
+    beClient.SetAttribute("Interval", TimeValue(Seconds(2.0)));
     beClient.SetAttribute("PacketSize", UintegerValue(packetSize));
 
     ApplicationContainer beApp = beClient.Install(nodes.Get(2));
@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
     mob4->SetPosition(Vector(300.0, 50.0, 0.0));
 
     // NetAnim
-    AnimationInterface anim("TSN2.xml");
+    AnimationInterface anim("TSN1.xml");
     anim.SetMaxPktsPerTraceFile(5000);
 
     anim.UpdateNodeDescription(0, "TSN Client");
@@ -389,7 +389,7 @@ int main(int argc, char *argv[])
         STARE VRIJEDOSTI AKO SE STA POKVARI 	*/
     //;
 
-    pointToPoint.EnablePcapAll("TSN2_packet_trace");
+    pointToPoint.EnablePcapAll("TSN1_packet_trace");
 
     Simulator::Schedule(Seconds(simulationTime), &Ratio);
 
