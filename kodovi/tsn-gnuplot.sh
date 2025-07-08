@@ -27,6 +27,8 @@ function gnuplot_calc(){
 	local gnuplot_dir="$7";
 	local be="$8";
 	local tsn="$9";
+	local throughput="${10}";
+	local throughput_gnuplot="${11}";
 	
 	echo -e "${magenta}$delay${white}";	
 	echo -e "${magenta}$jitter${white}";	
@@ -45,11 +47,7 @@ function gnuplot_calc(){
 	replot
 EOF
 	cat << EOF > "$jitter"
-<<<<<<< HEAD
-	set terminal png
-=======
 	set terminal pngcairo enhanced
->>>>>>> f0eec76 (Ažurirana bash skripta.)
 	set output "${jitter%.plt}.png"
 	set title "Packet Delay Variation (Jitter) - Packet size:$packet_size B"
 	set xlabel "Packet Sequence Number"
@@ -59,8 +57,23 @@ EOF
 	"$tsn" using 1:4 with linespoints lt rgb "blue" title "TSN Jitter"
 	replot
 EOF
+
+	cat << EOF > "$throughput_gnuplot"
+	set terminal pngcairo enhanced
+	set output "${throughput_gnuplot%.plt}.png"
+	set title "TSN Throughput Comparison"
+	set xlabel "TSN script"
+	set ylabel "Throughput (bps)"
+	set yrange [0:*]
+	set grid
+	set style data histograms
+	set style fill solid 1.0 border 1
+	plot "$throughput" using 2:xtic(1) title "Throughput"
+EOF
+
 	gnuplot "$delay" 
 	gnuplot "$jitter" 
+	gnuplot "$throughput_gnuplot";
 
 	mv "$gnuplot_dir/"*.png "$png";
 	mv "$gnuplot_dir/"*.plt "$plt";
@@ -158,12 +171,25 @@ for ((i=0; i<=${#scratch[@]}-1; i++)); do
 	tee "$current_file_tsn" <<< "$(grep '^\[TSN\]' "$current_file" | awk 'NR == 1 {gsub(/^/, "#", $2); gsub(":", "", $14); printf "%s %s %s %s\n", tolower($2), tolower($6), tolower($9), tolower($14)}{gsub(/s$/, "", $7); gsub(/^:/, "", $11); printf "%s %s %s %s\n", $3, $7, $11, $15}')"  
 	echo "";
 
+if [[ "$counter" -eq 1 ]]; then
+	echo "" > "$throughput_file";
+	awk '{printf "%s" $0}' "$throughput_file"  > "$throughput_file";
+fi;
+
+throughput_file="$results_dir/TSN_throughput.txt";
+gnuplot_file_throughput="$gnuplot_dir/TSN-throughput.plt";
+
+	grep 'Troughput.*[^k]bps' "$current_file" | awk "NR == 1 {print \"#Label\", \" \", \"Throughput\"} {print \"TSN${counter}\", \" \", \$4}" >> "$throughput_file"
+
 	# Moving files
 	mv $(ls | grep TSN${counter}.*pcap) "$pcap_dir";
 	mv $(ls | grep TSN${counter}.xml) "$xml_dir";
 	((counter++));
 
-	gnuplot_calc "$gnuplot_file_delay" "$gnuplot_file_jitter" "$current_file" "$size" "$gnuplot_dir_plt" "$gnuplot_dir_png" "$gnuplot_dir" "$current_file_be" "$current_file_tsn";	
+awk '{if (NR == 1) print; else if ($0 !~ /^#Label/) print}' "$throughput_file" > "${throughput_file}.tmp" && mv "${throughput_file}.tmp" "$throughput_file";
+
+	gnuplot_calc "$gnuplot_file_delay" "$gnuplot_file_jitter" "$current_file" "$size" "$gnuplot_dir_plt" "$gnuplot_dir_png" "$gnuplot_dir" "$current_file_be" "$current_file_tsn" "$throughput_file" "$gnuplot_file_throughput";	
 done;
+
 echo -e "\nKreiran je glavni TSN direktorij u kojem se nalaze sve relevantne datoteke za ovu simulaciju: ${magenta}$fin_dir${white}";
 echo "--------------------------------------------------";
