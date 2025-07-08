@@ -34,7 +34,7 @@ function gnuplot_calc(){
 	echo -e "\nKreiranje GnuPlot grafika...";
 
 	cat << EOF > "$delay"
-	set terminal png
+	set terminal pngcairo enhanced
 	set output "${delay%.plt}.png"
 	set title "End-to-End Delay per Packet - Packet size: $packet_size B"
 	set xlabel "Packet Sequence Number"
@@ -45,7 +45,11 @@ function gnuplot_calc(){
 	replot
 EOF
 	cat << EOF > "$jitter"
+<<<<<<< HEAD
 	set terminal png
+=======
+	set terminal pngcairo enhanced
+>>>>>>> f0eec76 (Ažurirana bash skripta.)
 	set output "${jitter%.plt}.png"
 	set title "Packet Delay Variation (Jitter) - Packet size:$packet_size B"
 	set xlabel "Packet Sequence Number"
