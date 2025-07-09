@@ -100,13 +100,27 @@ Preporučuje se pokretanje `tsn-gnuplot.sh` skripte koja automatski kreira sve n
 
 *Video snimke je najbolje pokrenuti pomoću VLC-a*
 
+#### Wireshark
+
 *Sljedeća tri video snimka prikazuju filtriranje mrežnog saobraćaja koji je zapisan i sačuvan u .pcap datoteke nakon pokretanja simulacije:*
 
--/-
+![tsn1-wireshark](videi/tsn1-wireshark.mp4)
+
+*Filtriranje mrežnog saobraćaja u Wireshark-u za prvi slučaj `TSN1.cc`. Biraju se izvorna i odredišna IP adresa, te frame number.*
+
+![tsn2-wireshark](videi/tsn2-wireshark.mp4)
+
+*Filtriranje mrežnog saobraćaja u Wireshark-u za drugi slučaj `TSN2.cc`. Filtrira se samo udp mrežni saobraćaj na portu 9.*
+
+![tsn-p2p-wireshark](videi/tsn-p2p-wireshark.mp4)
+
+*Filtriranje mrežnog saobraćaja u Wireshark-u za `TSN-P2P` slučaj. Filtrira se ICMP mrežni saobraćaj te se bira tačno određeni frame number 248.*
+
+#### NetAnim
 
 *Sljedeći video snimci prikazuju vizuelizaciju mrežne topologije u NetAnim-u:*
 
-*Za prvi i drugi slučaj: `TSN1.cc` i `TSN2.cc`, vizuelizacija je ista:*
+*Za prvi i drugi slučaj: `TSN1.cc` i `TSN2.cc`, netanim vizuelizacija je ista:*
 
 ![tsn-netanim](videi/tsn-netanim.mp4)
 
