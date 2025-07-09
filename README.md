@@ -49,7 +49,7 @@ ovime se pokreće prvi od dva slučaja TSN-a.
 
 Pored `TSN1` koda, mogu se pokrenuti i `TSN2` i `TSN-P2P` kodovi. Pokretanje svakog od ovih kodova će prikazati različite rezultate simulacije.
 
-`tsn-gnuplot.sh` je bash skripta koja se nalazi u: `kodovi` folderu. Može se preuzeti i sačuvati na bilo kojoj lokaciji, a pokreće se na sljedeći način (nakon što se promijeni aktivni direktorij u direktorij gdje se ova skripta nalazi):
+`tsn-gnuplot.sh` je bash skripta koja se nalazi u: `kodovi` folderu i pokreće `TSN1.cc` i `TSN2.cc` TSN simulacije. Može se preuzeti i sačuvati na bilo kojoj lokaciji, a pokreće se na sljedeći način (nakon što se promijeni aktivni direktorij u direktorij gdje se ova skripta nalazi):
 
 ```bash
 . tsn-gnuplot.sh
