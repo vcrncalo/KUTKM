@@ -102,22 +102,14 @@ Preporučuje se pokretanje `tsn-gnuplot.sh` skripte koja automatski kreira sve n
 
 *Sljedeća tri video snimka prikazuju filtriranje mrežnog saobraćaja koji je zapisan i sačuvan u .pcap datoteke nakon pokretanja simulacije:*
 
-![tsn2-wireshark](videi/tsn2-wireshark.mp4)
-*Filtriranje .pcap datoteke prvog slučaja (TSN1.cc)*
+-/-
 
-![tsn3-wireshark](videi/tsn3-wireshark.mp4)
-*Filtriranje .pcap datoteke prvog slučaja (TSN2.cc)*
+*Sljedeći video snimci prikazuju vizuelizaciju mrežne topologije u NetAnim-u:*
 
-![tsn4-wireshark](videi/tsn4-wireshark.mp4)
-*Filtriranje .pcap datoteke prvog slučaja (TSN4.cc)*
+*Za prvi i drugi slučaj: `TSN1.cc` i `TSN2.cc`, vizuelizacija je ista:*
 
-*Sljedeća tri video snimka prikazuju vizuelizaciju mrežne topologije u NetAnim-u:*
+![tsn-netanim](videi/tsn-netanim.mp4)
 
-![tsn2-netanim](videi/tsn2-netanim.mp4)
-*Filtriranje .pcap datoteke prvog slučaja (TSN1.cc)*
+*Za `TSN-P2P`, netanim vizuelizacija izgleda ovako:*
 
-![tsn3-netanim](videi/tsn3-netanim.mp4)
-*Filtriranje .pcap datoteke prvog slučaja (TSN2.cc)*
-
-![tsn4-netanim](videi/tsn4-netanim.mp4)
-*Filtriranje .pcap datoteke prvog slučaja (TSN4.cc)*
+![tsn-p2p-netanim](videi/tsn-p2p-netanim.mp4)
